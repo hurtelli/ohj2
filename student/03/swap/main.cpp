@@ -5,7 +5,7 @@
 
 
 
-#ifndef UNIT_TESTING
+
 
 void swap(int& string1, int& string2)
 {
@@ -14,7 +14,7 @@ void swap(int& string1, int& string2)
     string2 = mem;
 
 }
-
+#ifndef UNIT_TESTING
 int main()
 {
     std::cout << "Enter an integer: ";
