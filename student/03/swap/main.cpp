@@ -6,6 +6,15 @@
 
 
 #ifndef UNIT_TESTING
+
+void swap(int& string1, int& string2)
+{
+    int mem = string1;
+    string1 = string2;
+    string2 = mem;
+
+}
+
 int main()
 {
     std::cout << "Enter an integer: ";
