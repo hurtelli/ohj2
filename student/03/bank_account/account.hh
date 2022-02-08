@@ -17,6 +17,8 @@ public:
 
 private:
 
+    std::string owner_;
+
     void generate_iban();
 
     void account_money_set(int amount);
@@ -25,9 +27,11 @@ private:
 
     bool has_credit_;
 
-    std::string owner_;
+
 
     std::string iban_;
+
+
 
     int money_;
 
