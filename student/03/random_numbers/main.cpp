@@ -33,7 +33,7 @@ void produce_random_numbers(unsigned int lower, unsigned int upper)
 
 int main()
 {
-    unsigned int lower_bound, upper_bound, seed;
+    unsigned int lower_bound, upper_bound;
     cout << "Enter a lower bound: ";
     cin >> lower_bound;
     cout << "Enter an upper bound: ";
