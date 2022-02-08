@@ -6,12 +6,14 @@ using namespace std;
 
 void produce_random_numbers(unsigned int lower, unsigned int upper, unsigned int seed)
 {
+    default_random_engine gen(seed);
+    uniform_int_distribution<int> distr(lower, upper);
+
     int i = 0;
     char input = 'o';
     while(i == 0)
     {
-    default_random_engine gen(seed);
-    uniform_int_distribution<int> distr(lower, upper);
+
     cout << "Your drawn random number is " << distr(gen)<< endl;
 
 
