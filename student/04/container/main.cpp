@@ -35,7 +35,7 @@ bool same_values(std::vector<int>&integs)
 
 bool is_ordered_non_strict_ascending(std::vector<int>&ints)
 {
-    int muisti;
+    int muisti = ints.at(0);
     for (int alkio : ints)
 
         if (alkio >= muisti)
@@ -44,7 +44,14 @@ bool is_ordered_non_strict_ascending(std::vector<int>&ints)
         }
         else
         {
-            return false;
+            if (muisti == ints.at(0))
+            {
+                muisti =alkio;
+            }
+            else
+            {
+                return false;
+            }
         }
    return true;
 }
