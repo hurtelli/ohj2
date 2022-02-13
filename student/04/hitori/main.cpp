@@ -1,10 +1,58 @@
 #include <iostream>
 #include <vector>
+#include <random>
 
 using namespace std;
 
 const unsigned int BOARD_SIDE = 5;
 const unsigned char EMPTY = ' ';
+
+
+vector< vector<int> > yRow;
+
+//Gives values to every coordinate on the platform.
+//Has choice of inputting values manually or generating randomly.
+//Randomizing works with default random engine and seed is timeNULL.
+//Manual takes one value at a time and adds them to xVal vector,
+//and after row getting completed pushes yRow back by the created vector.
+
+void createBoard(){
+    default_random_engine rand;
+    uniform_int_distribution<> dist(1,5);
+    string  seed="";
+    cout << "Select start (R for random, I for input): ";
+    cin >> seed;
+
+    if (seed == "R" or seed == "r"){
+        rand.seed(time(NULL));
+        for (unsigned int y=0; y<BOARD_SIDE; ++y){
+            vector<int> xVal;
+            for (unsigned int x=0; x<BOARD_SIDE; ++x){
+                xVal.push_back(dist(rand));
+            }
+        yRow.push_back(xVal);
+        }
+    }
+    //maybe change method to make the input also accept all the numbers at once
+    //###########MAKE THIS CHECK THE INPUT USER GIVES!!!!!!!!!!!!##########
+    else{
+        int input;
+        cout << "Input: ";
+        for (unsigned int y=0; y<BOARD_SIDE; ++y){
+            vector<int> xVal;
+            for (unsigned int x=0; x<BOARD_SIDE; ++x){
+                cin >> input;
+                xVal.push_back(input);
+            }
+        yRow.push_back(xVal);
+        }
+    }
+}
+
+
+
+
+
 
 // Muuttaa annetun numeerisen merkkijonon vastaavaksi kokonaisluvuksi
 // (kutsumalla stoi-funktiota).
@@ -37,7 +85,7 @@ unsigned int stoi_with_check(const string& str)
 // Tulostaa pelilaudan rivi- ja sarakenumeroineen.
 //
 // Prints the game board with row and column numbers.
-void print(const /*vector of vectors or a compatible type*/& gameboard)
+void print(const vector< vector<int> >& gameboard)
 {
     cout << "=================" << endl;
     cout << "|   | 1 2 3 4 5 |" << endl;
@@ -63,5 +111,7 @@ void print(const /*vector of vectors or a compatible type*/& gameboard)
 
 int main()
 {
+    createBoard();
+    print(yRow);
     return 0;
 }
