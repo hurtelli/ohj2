@@ -3,9 +3,39 @@
 #include <vector>
 
 
-// TODO: Implement split function here
-// Do not change main function
+int split(std::string text, char sep, bool no_empty=false)
+{
+    std::vector<std::string> parts = {};
 
+
+    char muisti;
+    std::string muistix = "";
+    for (char x : text)
+    {
+        if(x == sep)
+        {
+            if(muisti==sep)
+            {
+
+                parts.push_back(muistix);
+            }
+            else
+            {
+                muistix += muisti;
+                muisti = x;
+            }
+
+        }
+        else
+        {
+            muistix += muisti;
+            muisti = x;
+        }
+
+
+    }
+    return std::vector<std::string>(parts)
+}
 
 int main()
 {

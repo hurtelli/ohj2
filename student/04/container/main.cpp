@@ -26,7 +26,14 @@ bool same_values(std::vector<int>&integs)
         }
         else
         {
-            return false;
+            if (muisti == integs.at(0))
+            {
+                muisti = alkio;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
     return true;

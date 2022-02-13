@@ -109,9 +109,52 @@ void print(const vector< vector<int> >& gameboard)
     cout << "=================" << endl;
 }
 
+bool deleteVal(){
+    string input="";
+    string input2="";
+    cout << "Enter removable element (x, y): ";
+    cin >> input >> input2;
+
+    if (input == "q" or input == "Q"){
+        cout << "Quitting"<<endl;
+        return false;
+    }
+    else{
+
+        if (stoi_with_check(input)==0 or stoi_with_check(input2) == 0){
+            cout << "Out of board"<<endl;
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+}
+
+int hasWon(){
+    return true;
+}
+
+
 int main()
 {
     createBoard();
     print(yRow);
+
+    //Starts the actual game that goes on in a loop until the function gets value false
+    while(true){
+        if(deleteVal()){
+        }
+        else{
+
+            break;
+        }
+
+    //prints the winning or losing or nothing message depending on the value of hasWon
+    if (hasWon){
+
+    }
+    }
+    cout << "toimi";
     return 0;
 }
