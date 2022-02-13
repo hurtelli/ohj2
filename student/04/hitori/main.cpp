@@ -109,30 +109,38 @@ void print(const vector< vector<int> >& gameboard)
     cout << "=================" << endl;
 }
 
-bool deleteVal(){
-    string input="";
-    string input2="";
-    cout << "Enter removable element (x, y): ";
-    cin >> input >> input2;
+bool deleteVal(vector< vector<int> >& yRow, vector<int> coords){
+    if(yRow.at(coords.at(0)-1).at(coords.at(1)-1) == 0){
+        cout << "You lost"<<endl;
+        return false;
+    }
+    else{
+        yRow.at(coords.at(0)-1).at(coords.at(1)-1) = 0;
+        return true;
+    }
+}
 
-    if (input == "q" or input == "Q"){
+int askValue(vector<int>& coords){
+    string x="";
+    string y="";
+    cout << "Enter removable element (x, y): ";
+    cin >> x;
+    if (x == "q" or x == "Q"){
         cout << "Quitting"<<endl;
         return false;
     }
     else{
-
-        if (stoi_with_check(input)==0 or stoi_with_check(input2) == 0){
+        cin >> y;
+        if (stoi_with_check(x) == 0 or stoi_with_check(y) == 0 or stoi(x) > 5 or stoi(y) > 5){
             cout << "Out of board"<<endl;
             return false;
         }
         else{
+            coords.push_back(stoi(x));
+            coords.push_back(stoi(y));
             return true;
         }
     }
-}
-
-int hasWon(){
-    return true;
 }
 
 
@@ -142,19 +150,12 @@ int main()
     print(yRow);
 
     //Starts the actual game that goes on in a loop until the function gets value false
+
     while(true){
-        if(deleteVal()){
-        }
-        else{
-
-            break;
-        }
-
-    //prints the winning or losing or nothing message depending on the value of hasWon
-    if (hasWon){
-
+        vector<int> coords={};
+        askValue(coords);
+        deleteVal(yRow, coords);
+        print(yRow);
     }
-    }
-    cout << "toimi";
     return 0;
 }
