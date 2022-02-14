@@ -1,0 +1,57 @@
+else{
+                //In the center of the grid
+                if(y < 4 and 0 < y and x < 4 and 0 < x){
+                    if(yRow.at(y).at(x-1)==0 and yRow.at(y).at(x+1)==0 and yRow.at(y-1).at(x)==0 and yRow.at(y+1).at(x)==0){
+                        cout << "irrallaan muista"<<endl;
+                        return true;
+                    }
+                }
+                //At top left
+                if(y==0 and x==0){
+                    if(yRow.at(y).at(x+1)==0 and yRow.at(y+1).at(x)==0){
+                        return true;
+                    }
+                }
+                //at top right####eitoimi#########
+                if(y==0 and x==4){
+                    if(yRow.at(y).at(x-1)==0 and yRow.at(y+1).at(x)==0){
+                        return true;
+                    }
+                }
+                //at bottom right #### ei toimi
+                if(x==4 and y==4){
+                    if(yRow.at(y).at(x-1)==0 and yRow.at(y-1).at(x)==0){
+                        return true;
+                    }
+                }
+                //at bottom left ###eitiomi####
+                if(x==0 and y==4){
+                    if(yRow.at(y).at(x+1)==0 and yRow.at(y-1).at(x)==0){
+                        return true;
+                    }
+                }
+                //at the left column
+                if(0<y and y < 4 and x==0){
+                    if(yRow.at(y).at(x+1)==0 and yRow.at(y-1).at(x)==0 and yRow.at(y+1).at(x)==0){
+                        return true;
+                    }
+                }
+                // at the top row
+                if(y==0 and 0 < x and x < 4){
+                    if(yRow.at(y).at(x+1)==0 and yRow.at(y+1).at(x)==0 and yRow.at(y).at(x-1)==0){
+                        return true;
+                    }
+                }
+                //at the right column###eitoimi####
+                if(x==4 and 0 < y and y < 4){
+                    if(yRow.at(y-1).at(x)==0 and yRow.at(y).at(x-1)==0 and yRow.at(y+1).at(x)==0){
+                        return true;
+                    }
+                }
+                //at the bottom row ###ei toimi#
+                if(y==4 and 0 < x and x < 4){
+                    if(yRow.at(y).at(x+1)==0 and yRow.at(y-1).at(x)==0 and yRow.at(y).at(x-1)==0){
+                        return true;
+                    }
+                }
+            }

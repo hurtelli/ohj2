@@ -8,7 +8,7 @@ const unsigned int BOARD_SIDE = 5;
 const unsigned char EMPTY = ' ';
 
 
-vector< vector<int> > yRow;
+
 
 //Gives values to every coordinate on the platform.
 //Has choice of inputting values manually or generating randomly.
@@ -16,7 +16,7 @@ vector< vector<int> > yRow;
 //Manual takes one value at a time and adds them to xVal vector,
 //and after row getting completed pushes yRow back by the created vector.
 
-void createBoard(){
+void createBoard(vector< vector<int> >& yRow){
     default_random_engine rand;
     uniform_int_distribution<> dist(1,5);
     string  seed="";
@@ -109,53 +109,94 @@ void print(const vector< vector<int> >& gameboard)
     cout << "=================" << endl;
 }
 
-bool deleteVal(vector< vector<int> >& yRow, vector<int> coords){
-    if(yRow.at(coords.at(0)-1).at(coords.at(1)-1) == 0){
-        cout << "You lost"<<endl;
-        return false;
+void deleteVal(vector< vector<int> >& yRow, const vector<int> coords) {
+
+    unsigned int y = (coords.at(0))-1;
+    unsigned int x = (coords.at(1))-1;
+    if(yRow.at(y).at(x) == 0){
+        cout << "Already removed"<<endl;
     }
     else{
-        yRow.at(coords.at(0)-1).at(coords.at(1)-1) = 0;
-        return true;
+        cout << coords.at(1)-1<<"  "<<coords.at(0)-1<<endl;
+        cout <<"pete"<< yRow.at(y).at(x) <<endl;
+        yRow.at(y).at(x) = 0;
     }
 }
 
-int askValue(vector<int>& coords){
+void askValue(vector<int>& coords){
     string x="";
     string y="";
     cout << "Enter removable element (x, y): ";
     cin >> x;
     if (x == "q" or x == "Q"){
         cout << "Quitting"<<endl;
-        return false;
     }
     else{
         cin >> y;
         if (stoi_with_check(x) == 0 or stoi_with_check(y) == 0 or stoi(x) > 5 or stoi(y) > 5){
             cout << "Out of board"<<endl;
-            return false;
         }
         else{
-            coords.push_back(stoi(x));
-            coords.push_back(stoi(y));
-            return true;
+            coords.push_back(stoi_with_check(y));
+            coords.push_back(stoi_with_check(x));
         }
     }
 }
 
+//the function goes to check every single point on the board and checks wether it has values on its sides or not
+//it also sees when the number has no connecting numbers and it is isolated
+bool isEnd(const vector< vector<int> > yRow){
+    cout << "alku"<<endl;
+    //creating the loop
+    for(int y=0; y <= 4; ++y){
+        for(int x=0; x <= 4; ++x){
+            //If the value at the point is zero then the function will check the right value and lower value
+            //If there is no possible right value only lower is checked
+            if(yRow.at(y).at(x)==0){
+                if(y <= 3){
+                    if(x < 4 and (yRow.at(y).at(x+1)==0 or yRow.at(y+1).at(x)==0)){
+                        cout << "toimivanegro"<<endl;
+                        return true;
+                    }
+                    else if(x==4 and yRow.at(y+1).at(x)==0){
+                        cout << "toimivanegro"<<endl;
+                        return true;
+                    }
+
+                }
+                else if(y==4 and x < 4){
+                    if(yRow.at(y).at(x+1)==0){
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
+}
 
 int main()
 {
-    createBoard();
+    vector< vector<int> > yRow;
+    createBoard(yRow);
     print(yRow);
 
     //Starts the actual game that goes on in a loop until the function gets value false
 
     while(true){
-        vector<int> coords={};
+        vector<int> coords = {};
         askValue(coords);
         deleteVal(yRow, coords);
-        print(yRow);
+        if (isEnd(yRow)){
+            print(yRow);
+            cout << "You lost"<<endl;
+            break;
+        }
+        else{
+            print(yRow);
+
+        }
     }
     return 0;
 }
