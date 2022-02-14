@@ -50,10 +50,6 @@ void createBoard(vector< vector<int> >& yRow){
 }
 
 
-
-
-
-
 // Muuttaa annetun numeerisen merkkijonon vastaavaksi kokonaisluvuksi
 // (kutsumalla stoi-funktiota).
 // Jos annettu merkkijono ei ole numeerinen, palauttaa nollan.
@@ -82,6 +78,7 @@ unsigned int stoi_with_check(const string& str)
     }
 }
 
+
 // Tulostaa pelilaudan rivi- ja sarakenumeroineen.
 //
 // Prints the game board with row and column numbers.
@@ -109,20 +106,25 @@ void print(const vector< vector<int> >& gameboard)
     cout << "=================" << endl;
 }
 
-void deleteVal(vector< vector<int> >& yRow, const vector<int> coords) {
 
+//"Deletes" the value after checking wether it has been already removed
+//Changes the vectors vector at the place to zero
+void deleteVal(vector< vector<int> >& yRow, const vector<int> coords) {
     unsigned int y = (coords.at(0))-1;
     unsigned int x = (coords.at(1))-1;
     if(yRow.at(y).at(x) == 0){
         cout << "Already removed"<<endl;
     }
     else{
-        cout << coords.at(1)-1<<"  "<<coords.at(0)-1<<endl;
-        cout <<"pete"<< yRow.at(y).at(x) <<endl;
         yRow.at(y).at(x) = 0;
     }
 }
 
+
+//Asks for 2 inputs for x and y coordinate to be removed
+//Has faulty value check with stoi_with_check function
+//Has also the quitting command input
+//Adds the coordinates to a vector to use with other functions
 void askValue(vector<int>& coords){
     string x="";
     string y="";
@@ -131,38 +133,37 @@ void askValue(vector<int>& coords){
     if (x == "q" or x == "Q"){
         cout << "Quitting"<<endl;
     }
+    //asks for the second value after determining whether user wants to quit or not
     else{
         cin >> y;
         if (stoi_with_check(x) == 0 or stoi_with_check(y) == 0 or stoi(x) > 5 or stoi(y) > 5){
             cout << "Out of board"<<endl;
         }
         else{
+            //transforms the string to int with stoi
             coords.push_back(stoi_with_check(y));
             coords.push_back(stoi_with_check(x));
         }
     }
 }
 
+
 //the function goes to check every single point on the board and checks wether it has values on its sides or not
 //it also sees when the number has no connecting numbers and it is isolated
-bool isEnd(const vector< vector<int> > yRow){
-    cout << "alku"<<endl;
+bool isEndEmpties(const vector< vector<int> > yRow){
     //creating the loop
     for(int y=0; y <= 4; ++y){
         for(int x=0; x <= 4; ++x){
             //If the value at the point is zero then the function will check the right value and lower value
-            //If there is no possible right value only lower is checked
+            //If there is no possible right value only lower is checked and vice versa(elseif)
             if(yRow.at(y).at(x)==0){
                 if(y <= 3){
                     if(x < 4 and (yRow.at(y).at(x+1)==0 or yRow.at(y+1).at(x)==0)){
-                        cout << "toimivanegro"<<endl;
                         return true;
                     }
                     else if(x==4 and yRow.at(y+1).at(x)==0){
-                        cout << "toimivanegro"<<endl;
                         return true;
                     }
-
                 }
                 else if(y==4 and x < 4){
                     if(yRow.at(y).at(x+1)==0){
@@ -176,9 +177,104 @@ bool isEnd(const vector< vector<int> > yRow){
     return false;
 }
 
+
+//isAlone checks every square and the neighbors to see wether they have values or not
+//
+bool isAlone(const vector< vector<int> > yRow){
+
+    for(int y=0; y<=4; ++y){
+        for(int x=0; x<=4;++x){
+
+            //binding all y==0 to same
+            if(y==0){
+                //top left
+                if(x==0){
+                    if(yRow.at(y).at(x+1)==0 and yRow.at(y+1).at(x)==0){
+                        return true;
+                    }
+                }
+                //top right
+                else if(x==4){
+                    if(yRow.at(y).at(x-1)==0 and yRow.at(y+1).at(x)==0){
+                        return true;
+                    }
+                }
+                //top row
+                else if(0 < x and x < 4){
+                    if(yRow.at(y).at(x+1)==0 and yRow.at(y+1).at(x)==0 and yRow.at(y).at(x-1)==0){
+                        return true;
+                    }
+                }
+            }
+            //binding all y=4
+            else if(y==4){
+                //bottom right
+                if(x==4){
+                    if(yRow.at(y).at(x-1)==0 and yRow.at(y-1).at(x)==0){
+                        return true;
+                    }
+                }
+                //bottom left
+                else if(x==0){
+                    if(yRow.at(y).at(x+1)==0 and yRow.at(y-1).at(x)==0){
+                        return true;
+                    }
+                }
+                //bottom row
+                else if(0 < x and x < 4){
+                    if(yRow.at(y).at(x+1)==0 and yRow.at(y-1).at(x)==0 and yRow.at(y).at(x-1)==0){
+                        return true;
+                    }
+                }
+            }
+
+            //left column
+            else if(0<y and y < 4 and x==0){
+                if(yRow.at(y).at(x+1)==0 and yRow.at(y-1).at(x)==0 and yRow.at(y+1).at(x)==0){
+                    return true;
+                }
+            }
+
+            //right column
+            else if(0 < y and y < 4 and x==4){
+                if(yRow.at(y).at(x-1)==0 and yRow.at(y-1).at(x)==0 and yRow.at(y+1).at(x)==0){
+                    return true;
+                }
+            }
+
+            //In the center of the grid
+            else{
+                if(y < 4 and 0 < y and x < 4 and 0 < x){
+                    if(yRow.at(y).at(x-1)==0 and yRow.at(y).at(x+1)==0 and yRow.at(y-1).at(x)==0 and yRow.at(y+1).at(x)==0){
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+
+//binds the two functions of losing the game together
+//and returns bool whether game has been lost or not
+bool isGameOver(vector< vector<int> >& yRow){
+    if(isEndEmpties(yRow) or isAlone(yRow)){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+
 int main()
 {
+    //The vector yRow is the data storage that includes a vector for every row
+    //Naming is a reminder that the first value that you input is the y-value
+    //and the second value is the x in the correct y level
     vector< vector<int> > yRow;
+
     createBoard(yRow);
     print(yRow);
 
@@ -187,15 +283,20 @@ int main()
     while(true){
         vector<int> coords = {};
         askValue(coords);
-        deleteVal(yRow, coords);
-        if (isEnd(yRow)){
-            print(yRow);
-            cout << "You lost"<<endl;
-            break;
+        if(coords.size() > 1){
+            deleteVal(yRow, coords);
+            if (isGameOver(yRow)){
+                print(yRow);
+                cout << "You lost"<<endl;
+                break;
+            }
+            else{
+                print(yRow);
+
+            }
         }
         else{
-            print(yRow);
-
+            break;
         }
     }
     return 0;
