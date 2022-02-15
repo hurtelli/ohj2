@@ -128,15 +128,17 @@ void print(const vector< vector<int> >& gameboard)
 
 //"Deletes" the value after checking wether it has been already removed
 //Changes the vectors vector at the place to zero
-void deleteVal(vector< vector<int> >& yRow, const vector<int> coords) {
-    unsigned int y = (coords.at(0))-1;
-    unsigned int x = (coords.at(1))-1;
-    if(yRow.at(y).at(x) == 0){
-        cout << "Already removed"<<endl;
-    }
-    else{
-        yRow.at(y).at(x) = 0;
-    }
+bool deleteVal(vector< vector<int> >& yRow, const vector<int> coords) {
+        unsigned int y = (coords.at(0))-1;
+        unsigned int x = (coords.at(1))-1;
+        if(yRow.at(y).at(x) == 0){
+            cout << "Already removed" <<endl;
+            return false;
+        }
+        else{
+            yRow.at(y).at(x) = 0;
+            return true;
+        }
 }
 
 
@@ -304,14 +306,18 @@ bool isWon(vector< vector<int> >& yRow){
         for(unsigned int x=0; x<BOARD_SIDE;++x){
             //loop for the comparison value
             for(unsigned int l=0; l<BOARD_SIDE; ++l){
-                if(l != x){
-                    if(yRow.at(y).at(x)==yRow.at(y).at(l)){
-                        return false;
-                    }
+                cout <<"rivit"<< x <<"  is compared to    " << l<<endl;
+                if(yRow.at(y).at(x)!=0){
+                    if(l != x){
+                        if(yRow.at(y).at(x)==yRow.at(y).at(l)){
+                            return false;
+                        }
 
+                    }
                 }
             }
         }
+
     }
     //this loop checks the vertical lines for repeating values by ++x every round
     for(unsigned int x=0; x<BOARD_SIDE; ++x){
@@ -319,9 +325,12 @@ bool isWon(vector< vector<int> >& yRow){
         for(unsigned int y=0; y<BOARD_SIDE; ++y){
             //value that is being compared
             for(unsigned int p=0; p<BOARD_SIDE; ++p){
-                if(y != p){
-                    if(yRow.at(y).at(x)==yRow.at(p).at(x)){
-                        return false;
+                cout <<"sarakkeet"<< y <<"  is compared to    " << p<<endl;
+                if(yRow.at(y).at(x)!=0){
+                    if(y != p){
+                        if(yRow.at(y).at(x)==yRow.at(p).at(x)){
+                            return false;
+                        }
                     }
                 }
             }
@@ -346,24 +355,29 @@ int main()
         //vector coords is emptied every time to get new values in
         vector<int> coords = {};
         askValue(coords);
-        //if the
-        if(coords.size() > 1){
-            deleteVal(yRow, coords);
-            if (isLost(yRow)){
-                print(yRow);
-                cout << "You lost"<<endl;
-                break;
+
+        if(coords.size()>1){
+            //checks that the value given is removable or doesn't go to check for wins or losses
+            if(deleteVal(yRow, coords)){
+                if (isLost(yRow)){
+                    print(yRow);
+                    cout << "You lost"<<endl;
+                    break;
+                }
+                else if(isWon(yRow)){
+                    print(yRow);
+                    cout << "You won"<<endl;
+                    break;
+                }
+                else{
+                    print(yRow);
+                }
             }
-            else if(isWon(yRow)){
-                print(yRow);
-                cout << "You won"<<endl;
-                break;
-            }
-            print(yRow);
         }
         else{
             break;
         }
+
     }
     return 0;
 }
