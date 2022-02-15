@@ -1,54 +1,19 @@
 #include <iostream>
 #include <vector>
 #include <random>
+#include <algorithm>
+#include <string>
 
 using namespace std;
 
 const unsigned int BOARD_SIDE = 5;
 const unsigned char EMPTY = ' ';
 
-
-
-
-//Gives values to every coordinate on the platform.
-//Has choice of inputting values manually or generating randomly.
-//Randomizing works with default random engine and seed is timeNULL.
-//Manual takes one value at a time and adds them to xVal vector,
-//and after row getting completed pushes yRow back by the created vector.
-
-void createBoard(vector< vector<int> >& yRow){
-    default_random_engine rand;
-    uniform_int_distribution<> dist(1,5);
-    string  seed="";
-    cout << "Select start (R for random, I for input): ";
-    cin >> seed;
-
-    if (seed == "R" or seed == "r"){
-        rand.seed(time(NULL));
-        for (unsigned int y=0; y<BOARD_SIDE; ++y){
-            vector<int> xVal;
-            for (unsigned int x=0; x<BOARD_SIDE; ++x){
-                xVal.push_back(dist(rand));
-            }
-        yRow.push_back(xVal);
-        }
-    }
-    //maybe change method to make the input also accept all the numbers at once
-    //###########MAKE THIS CHECK THE INPUT USER GIVES!!!!!!!!!!!!##########
-    else{
-        int input;
-        cout << "Input: ";
-        for (unsigned int y=0; y<BOARD_SIDE; ++y){
-            vector<int> xVal;
-            for (unsigned int x=0; x<BOARD_SIDE; ++x){
-                cin >> input;
-                xVal.push_back(input);
-            }
-        yRow.push_back(xVal);
-        }
-    }
+string removeSpaces(string input)
+{
+  input.erase(std::remove(input.begin(),input.end(),' '),input.end());
+  return input;
 }
-
 
 // Muuttaa annetun numeerisen merkkijonon vastaavaksi kokonaisluvuksi
 // (kutsumalla stoi-funktiota).
@@ -77,6 +42,61 @@ unsigned int stoi_with_check(const string& str)
         return 0;
     }
 }
+
+
+//Gives values to every coordinate on the platform.
+//Has choice of inputting values manually or generating randomly.
+//Randomizing works with default random engine and seed is timeNULL.
+//Manual takes one value at a time and adds them to xVal vector,
+//and after row getting completed3 5 3 4 5 2 4 2 1 3 3 3 1 5 3 5 1 2 3 5 5 3 3 2 5 pushes yRow back by the created vector.
+
+void createBoard(vector< vector<int> >& yRow){
+    default_random_engine rand;
+    uniform_int_distribution<> dist(1,5);
+
+    //Loop verifies that the input given is r or i (not case sensitive)
+    while(true){
+        string  seed="";
+        cout << "Select start (R for random, I for input): ";
+        getline(cin,seed);
+        if (seed == "R" or seed == "r"){
+            rand.seed(time(NULL));
+            for (unsigned int y=0; y<BOARD_SIDE; ++y){
+                vector<int> xVal;
+                for (unsigned int x=0; x<BOARD_SIDE; ++x){
+                    xVal.push_back(dist(rand));
+                }
+            yRow.push_back(xVal);
+            }
+            break;
+        }
+
+        //gets the input manually
+        else if(seed=="i" or seed=="I"){
+            string input;
+            cout << "Input: ";
+            std::getline(std::cin,input);
+            string intPut = removeSpaces(input);
+            cout << intPut <<endl;
+            for (unsigned int y=0; y < BOARD_SIDE; ++y){
+                vector<int> xVal;
+                for (unsigned int x=0; x<BOARD_SIDE; ++x){
+                    char newChar = intPut.at(0);
+                    int newNumb = newChar-'0';
+                    xVal.push_back(newNumb);
+                    intPut.erase(0,1);
+                }
+            yRow.push_back(xVal);
+            }
+            break;
+            }
+
+    }
+
+
+}
+
+
 
 
 // Tulostaa pelilaudan rivi- ja sarakenumeroineen.
@@ -258,7 +278,7 @@ bool isAlone(const vector< vector<int> > yRow){
 
 //binds the two functions of losing the game together
 //and returns bool whether game has been lost or not
-bool isGameOver(vector< vector<int> >& yRow){
+bool isLost(vector< vector<int> >& yRow){
     if(isEndEmpties(yRow) or isAlone(yRow)){
         return true;
     }
@@ -267,6 +287,37 @@ bool isGameOver(vector< vector<int> >& yRow){
     }
 }
 
+bool isWon(vector< vector<int> >& yRow){
+    //this loop checks the horizontal lines for double values
+    for(unsigned int y=0; y<BOARD_SIDE; ++y){
+        //if the same value appears twice it returns false as the game has not been won
+        for(unsigned int x=0; x<BOARD_SIDE;++x){
+            //loop for the comparison value
+            for(unsigned int l=1; l<BOARD_SIDE; ++l){
+                if(l != x){
+                    if(yRow.at(y).at(x)==yRow.at(y).at(l)){
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    //this loop checks the vertical lines for repeating values by ++x every round
+    for(unsigned int x=0; x<BOARD_SIDE; ++x){
+        //original value
+        for(unsigned int y=0; y<BOARD_SIDE; ++y){
+            //value that is being compared
+            for(unsigned int p=0; p<BOARD_SIDE; ++p){
+                if(y != p){
+                    if(yRow.at(y).at(x)==yRow.at(p).at(x)){
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    return true;
+}
 
 int main()
 {
@@ -281,19 +332,23 @@ int main()
     //Starts the actual game that goes on in a loop until the function gets value false
 
     while(true){
+        //vector coords is emptied every time to get new values in
         vector<int> coords = {};
         askValue(coords);
+        //if the
         if(coords.size() > 1){
             deleteVal(yRow, coords);
-            if (isGameOver(yRow)){
+            if (isLost(yRow)){
                 print(yRow);
                 cout << "You lost"<<endl;
                 break;
             }
-            else{
+            else if(isWon(yRow)){
                 print(yRow);
-
+                cout << "You won"<<endl;
+                break;
             }
+            print(yRow);
         }
         else{
             break;
