@@ -306,7 +306,6 @@ bool isWon(vector< vector<int> >& yRow){
         for(unsigned int x=0; x<BOARD_SIDE;++x){
             //loop for the comparison value
             for(unsigned int l=0; l<BOARD_SIDE; ++l){
-                cout <<"rivit"<< x <<"  is compared to    " << l<<endl;
                 if(yRow.at(y).at(x)!=0){
                     if(l != x){
                         if(yRow.at(y).at(x)==yRow.at(y).at(l)){
@@ -325,7 +324,6 @@ bool isWon(vector< vector<int> >& yRow){
         for(unsigned int y=0; y<BOARD_SIDE; ++y){
             //value that is being compared
             for(unsigned int p=0; p<BOARD_SIDE; ++p){
-                cout <<"sarakkeet"<< y <<"  is compared to    " << p<<endl;
                 if(yRow.at(y).at(x)!=0){
                     if(y != p){
                         if(yRow.at(y).at(x)==yRow.at(p).at(x)){
