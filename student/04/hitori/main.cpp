@@ -146,23 +146,27 @@ void deleteVal(vector< vector<int> >& yRow, const vector<int> coords) {
 //Has also the quitting command input
 //Adds the coordinates to a vector to use with other functions
 void askValue(vector<int>& coords){
-    string x="";
-    string y="";
-    cout << "Enter removable element (x, y): ";
-    cin >> x;
-    if (x == "q" or x == "Q"){
-        cout << "Quitting"<<endl;
-    }
-    //asks for the second value after determining whether user wants to quit or not
-    else{
-        cin >> y;
-        if (stoi_with_check(x) == 0 or stoi_with_check(y) == 0 or stoi(x) > 5 or stoi(y) > 5){
-            cout << "Out of board"<<endl;
+    while(true){
+        string x="";
+        string y="";
+        cout << "Enter removable element (x, y): ";
+        cin >> x;
+        if (x == "q" or x == "Q"){
+            cout << "Quitting"<<endl;
+            break;
         }
+        //asks for the second value after determining whether user wants to quit or not
         else{
-            //transforms the string to int with stoi
-            coords.push_back(stoi_with_check(y));
-            coords.push_back(stoi_with_check(x));
+            cin >> y;
+            if (stoi_with_check(x) == 0 or stoi_with_check(y) == 0 or stoi(x) > 5 or stoi(y) > 5){
+                cout << "Out of board"<<endl;
+            }
+            else{
+                //transforms the string to int with stoi
+                coords.push_back(stoi_with_check(y));
+                coords.push_back(stoi_with_check(x));
+                break;
+            }
         }
     }
 }
@@ -287,17 +291,25 @@ bool isLost(vector< vector<int> >& yRow){
     }
 }
 
+
+//goes through all rows and vertical lines on the board and checks for double values
+//returns false in case there is
+    //1. a row that has the same value twice
+    //2. a horizontal line that has the same value twice
+//after it has checked every line it returns true and game has been won
 bool isWon(vector< vector<int> >& yRow){
+
     //this loop checks the horizontal lines for double values
     for(unsigned int y=0; y<BOARD_SIDE; ++y){
         //if the same value appears twice it returns false as the game has not been won
         for(unsigned int x=0; x<BOARD_SIDE;++x){
             //loop for the comparison value
-            for(unsigned int l=1; l<BOARD_SIDE; ++l){
+            for(unsigned int l=0; l<BOARD_SIDE; ++l){
                 if(l != x){
                     if(yRow.at(y).at(x)==yRow.at(y).at(l)){
                         return false;
                     }
+
                 }
             }
         }
