@@ -77,7 +77,6 @@ void createBoard(vector< vector<int> >& yRow){
             cout << "Input: ";
             std::getline(std::cin,input);
             string intPut = removeSpaces(input);
-            cout << intPut <<endl;
             for (unsigned int y=0; y < BOARD_SIDE; ++y){
                 vector<int> xVal;
                 for (unsigned int x=0; x<BOARD_SIDE; ++x){
