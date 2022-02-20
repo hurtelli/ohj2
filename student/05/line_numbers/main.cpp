@@ -22,7 +22,6 @@ int main()
         std::string row="";
         int counter=1;
         while(getline(infile, row)){
-            std::cout<<row<<std::endl;
             std::string outrow = "";
             outrow+=std::to_string(counter);
             outrow+=" ";
@@ -33,7 +32,6 @@ int main()
         }
         infile.close();
         outfile<<outext;
-        std::cout<<outext;
         outfile.close();
     }
     else{
