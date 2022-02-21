@@ -4,11 +4,13 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+
 int p(std::string str){
     int am = 0;
     for(int i =0; i<(int)str.length();++i){
         if(isdigit(str[i])){
-            am += i;
+            int num = str[i] -'0';
+            am +=num;
         }
     }
     return am;
