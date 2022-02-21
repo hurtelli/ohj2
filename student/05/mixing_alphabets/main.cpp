@@ -18,9 +18,14 @@ int main()
         {
             return EXIT_SUCCESS;
         }
-
-        // TODO: implement your solution here
-	
-        std::cout << word << std::endl;
+        else{
+            if(word.length() > 1){
+                shuffle(word.begin()+1,word.end()-1, generator);
+                std::cout << word << std::endl;
+            }
+            else{
+                std::cout << word << std::endl;
+            }
+        }
     }
 }
