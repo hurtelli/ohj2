@@ -35,7 +35,7 @@ void s(std::string str, std::map<std::string, int>& mp){
 int main()
 {
     std::string tiedoston_nimi = "";
-        std::cout << "Syota tiedoston nimi: ";
+        std::cout << "Input file: ";
         getline(std::cin, tiedoston_nimi);
 
         std::ifstream tied(tiedoston_nimi);
