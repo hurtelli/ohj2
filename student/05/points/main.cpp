@@ -54,7 +54,7 @@ int main()
                 s(rivi, pisteet);
             }
         for ( auto pair : pisteet ) {
-            std::cout << pair.first << " "
+            std::cout << pair.first << ": "
                  << pair.second << std::endl;
         }
         }
