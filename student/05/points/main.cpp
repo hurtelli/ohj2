@@ -4,23 +4,29 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+int p(std::string str){
+    int am = 0;
+    for(int i =0; i<(int)str.length();++i){
+        if(isdigit(str[i])){
+            am += i;
+        }
+    }
+    return am;
+}
 
 void s(std::string str, std::map<std::string, int>& mp){
     std::string temp = "";
 
     for(int i=0; i<(int)str.size(); i++){
-      // If cur char is not del, then append it to the cur "word", otherwise
-        // you have completed the word, print it, and start a new word.
        if(str[i] != ':'){
           temp += str[i];
       }
         else{
             if(mp.find(temp)!=mp.end()){
-                mp.at(temp) += str.at(str.length()-1);
-                std::cout<< str.at(str.length()-1)<<"pistettä inee"<<std::endl;
+                mp.at(temp) += p(str);
             }
             else{
-                mp.insert(std::pair<std::string,int>(temp,str[-1]));
+                mp.insert(std::pair<std::string,int>(temp,p(str)));
             }
       }
   }
