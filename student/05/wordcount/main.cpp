@@ -45,7 +45,31 @@ void rowocc(std::string w, std::string filen, std::vector<int>& rovec){
         for(unsigned int i=0; i<riviwords.size(); ++i){ //rivin alkioiden läpikäynti
             std::string wrd=riviwords.at(i);
             if(wrd==w){         //jos sana on listassa
-                rovec.push_back(rowcounter);
+                if(rovec.size()>0){
+                    if(rovec.at(0) == rowcounter){
+                    }
+                    else{
+                        rovec.push_back(rowcounter);
+                    }
+                }
+                else if(rovec.size()>1){
+                    if(rovec.at(1) == rowcounter){
+                    }
+                    else{
+                        rovec.push_back(rowcounter);
+                    }
+                }
+                else if(rovec.size()>2){
+                    if(rovec.at(2) == rowcounter){
+                    }
+                    else{
+                        rovec.push_back(rowcounter);
+                    }
+                }
+
+                else{
+                    rovec.push_back(rowcounter);
+                }
             }
         }
         ++rowcounter;
