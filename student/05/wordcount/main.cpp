@@ -103,27 +103,37 @@ int main(){
     }
     else{
 
-        std::map<std::string, int>used={};  //käytetyt sanat ja määrä                               ; //käytetyt sanat ja vectori missä sijainti
+        std::map<std::string, int>used={};  //käytetyt sanat ja määrä
+        std::map<std::string, int>used2={}; //käytetyt sanat ja rivi jolla käytetty
         std::string rivi="";
+        int rowco =0;
         while(getline(input, rivi)){                        //uusi rivi joka kiekka
 
             std::vector<std::string> riviwords ={};     //vektorisoidaan rivi
             vectorize(rivi, riviwords);
 
             for(unsigned int i=0; i<riviwords.size(); ++i){ //rivin alkioiden läpikäynti
-                std::string wrd=riviwords.at(i);
-                int temp=0; //sanan määrä
+                std::string wrd=riviwords.at(i);            //sana on läpikäytävä alkio
                 if(used.find(wrd)!=used.end()){         //jos sana on rivillä
-                    temp += used.at(wrd);
-                    temp += counter(wrd, riviwords);
-                    used.erase(wrd);
-                    used.insert({wrd,temp});
+                    if(used2[wrd]==rowco){
+                    }
+                    else{
+                        int temp=0;
+                        temp+=used[wrd];
+                        temp+=counter(wrd,riviwords);
+                        used.erase(wrd);
+                        used.insert({wrd, temp});
+                        used2.erase(wrd);
+                        used2.insert({wrd,rowco});
+                    }
                 }
                 else{                                   //jos sana ei ole listassa
                     used.insert({wrd, counter(wrd,riviwords)});
-                    i+=riviwords.size();
+                    used2.insert({wrd,rowco});
+
                 }
             }
+            ++rowco;
         }
         input.close();
 
