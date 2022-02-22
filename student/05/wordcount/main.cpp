@@ -59,7 +59,7 @@ void rowocc(std::string w, std::string filen, std::vector<int>& rovec){
                         rovec.push_back(rowcounter);
                     }
                 }
-                else if(rovec.size()>2){
+                else if(rovec.size()>=2){
                     if(rovec.at(2) == rowcounter){
                     }
                     else{

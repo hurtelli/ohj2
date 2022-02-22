@@ -9,8 +9,15 @@ int p(std::string str){
     int am = 0;
     for(int i =0; i<(int)str.length();++i){
         if(isdigit(str[i])){
+            if(isdigit(str[i+1])){
+                std::string penis=str.substr(i,2);
+                int cnum =stoi(penis);
+                am+=cnum;
+            }
+            else{
             int num = str[i] -'0';
             am +=num;
+            }
         }
     }
     return am;
