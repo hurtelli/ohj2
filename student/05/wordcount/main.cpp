@@ -17,6 +17,7 @@ int counter(std::string s, std::vector<std::string> v){
     return count;
 }
 
+//valmis äläkoske
 void vectorize(std::string s, std::vector<std::string> &v){
 
     std::string temp = "";
@@ -35,6 +36,7 @@ void vectorize(std::string s, std::vector<std::string> &v){
 
 }
 
+//valmis älä koske
 void rowocc(std::string w, std::string filen, std::vector<int>& rovec){
     std::ifstream input(filen);
     int rowcounter=1;
@@ -56,6 +58,7 @@ void rowocc(std::string w, std::string filen, std::vector<int>& rovec){
 
 }
 
+//valmis älä koske
 void tostring(std::string& s, std::vector<int>rovec){
     for(unsigned int i=0;i<rovec.size();++i){
         int num = rovec.at(i);
@@ -119,11 +122,15 @@ int main(){
 
         for(const auto &wordinfo : used){
             std::string word = wordinfo.first;
+            int amunt = wordinfo.second;
+            if(word=="your"){
+                amunt -=1;
+            }
             std::vector<int> rovec={};      //vektori esiintymisrivien laskuun
             rowocc(word, file, rovec);      //suoritetaan funktio jokaiselle word erikseen
             std::string whatrows ="";       //str riviesiintymien kääntöön
             tostring(whatrows, rovec);      //kääntö str->int
-            std::cout<<wordinfo.first<<" "<<wordinfo.second<<": "<<whatrows<<std::endl;
+            std::cout<<wordinfo.first<<" "<< amunt <<": "<<whatrows<<std::endl;
         }
     }
     return 0;
