@@ -42,38 +42,18 @@ void rowocc(std::string w, std::string filen, std::vector<int>& rovec){
     while (getline(input,rivi)){
         std::vector<std::string> riviwords ={};     //vektorisoidaan rivi
         vectorize(rivi, riviwords);
+
         for(unsigned int i=0; i<riviwords.size(); ++i){ //rivin alkioiden läpikäynti
             std::string wrd=riviwords.at(i);
-            if(wrd==w){         //jos sana on listassa
-                if(rovec.size()>0){
-                    if(rovec.at(0) == rowcounter){
-                    }
-                    else{
-                        rovec.push_back(rowcounter);
-                    }
-                }
-                else if(rovec.size()>1){
-                    if(rovec.at(1) == rowcounter){
-                    }
-                    else{
-                        rovec.push_back(rowcounter);
-                    }
-                }
-                else if(rovec.size()>=2){
-                    if(rovec.at(2) == rowcounter){
-                    }
-                    else{
-                        rovec.push_back(rowcounter);
-                    }
-                }
-
-                else{
-                    rovec.push_back(rowcounter);
-                }
+            if(wrd==w){         //jos läpikäytävä sana on listassa
+                rovec.push_back(rowcounter);
+                i+=riviwords.size();
             }
         }
         ++rowcounter;
     }
+
+
 }
 
 void tostring(std::string& s, std::vector<int>rovec){
@@ -114,7 +94,7 @@ int main(){
 
             for(unsigned int i=0; i<riviwords.size(); ++i){ //rivin alkioiden läpikäynti
                 std::string wrd=riviwords.at(i);            //sana on läpikäytävä alkio
-                if(used.find(wrd)!=used.end()){         //jos sana on rivillä
+                if(used.find(wrd)!=used.end()){         //jos sana on rivillä lisätään sen esintyymisarvoon
                     if(used2[wrd]==rowco){
                     }
                     else{
@@ -127,7 +107,7 @@ int main(){
                         used2.insert({wrd,rowco});
                     }
                 }
-                else{                                   //jos sana ei ole listassa
+                else{                                   //jos sana ei ole listassa lisätään sen esiintymisarvoon
                     used.insert({wrd, counter(wrd,riviwords)});
                     used2.insert({wrd,rowco});
 
@@ -139,10 +119,10 @@ int main(){
 
         for(const auto &wordinfo : used){
             std::string word = wordinfo.first;
-            std::vector<int> rovec={};
-            rowocc(word, file, rovec);
-            std::string whatrows ="";
-            tostring(whatrows, rovec);
+            std::vector<int> rovec={};      //vektori esiintymisrivien laskuun
+            rowocc(word, file, rovec);      //suoritetaan funktio jokaiselle word erikseen
+            std::string whatrows ="";       //str riviesiintymien kääntöön
+            tostring(whatrows, rovec);      //kääntö str->int
             std::cout<<wordinfo.first<<" "<<wordinfo.second<<": "<<whatrows<<std::endl;
         }
     }
