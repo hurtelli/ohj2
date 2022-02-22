@@ -103,8 +103,7 @@ int main(){
     }
     else{
 
-        std::map<std::string, int>used={};  //käytetyt sanat ja määrä
-                                                      ; //käytetyt sanat ja vectori missä sijainti
+        std::map<std::string, int>used={};  //käytetyt sanat ja määrä                               ; //käytetyt sanat ja vectori missä sijainti
         std::string rivi="";
         while(getline(input, rivi)){                        //uusi rivi joka kiekka
 
@@ -113,8 +112,8 @@ int main(){
 
             for(unsigned int i=0; i<riviwords.size(); ++i){ //rivin alkioiden läpikäynti
                 std::string wrd=riviwords.at(i);
-                if(used.find(wrd)!=used.end()){         //jos sana on listassa
-                    int temp=0; //sanan määrä
+                int temp=0; //sanan määrä
+                if(used.find(wrd)!=used.end()){         //jos sana on rivillä
                     temp += used.at(wrd);
                     temp += counter(wrd, riviwords);
                     used.erase(wrd);
@@ -122,6 +121,7 @@ int main(){
                 }
                 else{                                   //jos sana ei ole listassa
                     used.insert({wrd, counter(wrd,riviwords)});
+                    i+=riviwords.size();
                 }
             }
         }
