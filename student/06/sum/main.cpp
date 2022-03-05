@@ -41,6 +41,7 @@ int sum_recursive(std::vector<int>& v){
     else{
         return sum;
     }
+    return sum;
 }
 
 // Do not modify rest of the code, or the automated testing won't work.
