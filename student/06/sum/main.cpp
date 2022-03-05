@@ -5,6 +5,8 @@
 #define RECURSIVE_FUNC
 #endif
 
+int sum=0;
+
 std::vector<std::string> split(const std::string& s, const char delimiter, bool ignore_empty = false){
     std::vector<std::string> result;
     std::string tmp = s;
@@ -31,7 +33,14 @@ int sum_recursive(std::vector<int>& v){
     // ------------
 
 
-    // Add your implementation here
+    if(v.size()>=1){
+       sum += v.back();
+       v.pop_back();
+       sum_recursive(v);
+    }
+    else{
+        return sum;
+    }
 }
 
 // Do not modify rest of the code, or the automated testing won't work.
