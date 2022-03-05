@@ -14,7 +14,7 @@ bool palindrome_recursive(std::string s)
   int n = s.length()-1;
   char a = s[0];
   char b = s[n];
-  if(s.length()>2){
+  if(s.length()>1){
       if(a==b){
           s.erase(0,1);
           s.erase(n-1,1);
