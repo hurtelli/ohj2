@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <map>
 
 const std::string HELP_TEXT = "S = store id1 i2\nP = print id\n"
                               "C = count id\nD = depth id\n";
@@ -30,9 +31,49 @@ std::vector<std::string> split(const std::string& s,
     return result;
 }
 
+void save(std::string id1, std::string id2, std::map<std::string,std::vector<std::string>>& names){
+    if(names.find(id1)!=names.end()){
+        names[id1].push_back(id2);
+    }
+    else{
+        names.insert(std::pair<std::string,std::vector<std::string> >(id1,std::vector<std::string>()));
+        names[id1].push_back(id2);
+    }
+}
+
+//arvoina lista, id ja num
+//tarkistaa onko idllä alaideitä jos on niin tulostaa nimen
+//rekursioi ja tarkastaa uudestaan alaidtä jnejne..
+//mikäli ei ole alaid:tä tulostaa vain id nimen
+//ja palaa takaisin ylempään kerrokseen
+void print(std::map<std::string,std::vector<std::string>> names, std::string id,int& num){
+    std::string merkit(num*2,'.');
+
+    //jos id:llä on alaideitä
+    if(names.find(id)!=names.end()){
+        //tulostetaan nimi
+        std::cout<<merkit<<id<<std::endl;
+        //suoritetaan print tutkiminen alaid:lle
+        ++num;
+        for(unsigned int i=0; i<names.at(id).size();++i){
+            print(names, names.at(id).at(i),num);
+        }
+    }
+    //jos id on umpikuja
+    else{
+        //tulostetaan nimi ja palataan
+        std::cout<<merkit<<id<<std::endl;
+        --num;
+        return;
+    }
+}
+
 int main()
 {
-    // TODO: Implement the datastructure here
+    int nm = 0;
+    //vector contains all people that participate
+    //used to check their existence
+    std::map<std::string,std::vector<std::string>> names ={};
 
 
     while(true)
@@ -59,8 +100,7 @@ int main()
             }
             std::string id1 = parts.at(1);
             std::string id2 = parts.at(2);
-
-            // TODO: Implement the command here!
+            save(id1,id2,names);
 
         }
         else if(command == "P" or command == "p")
@@ -72,7 +112,7 @@ int main()
             }
             std::string id = parts.at(1);
 
-            // TODO: Implement the command here!
+            print(names, id, nm);
 
         }
         else if(command == "C" or command == "c")
