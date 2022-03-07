@@ -173,7 +173,7 @@ int main()
                 continue;
             }
             std::string id = parts.at(1);
-            int d=0;
+            int d=1;
             int cmp=0;
             depth(names,id,d,cmp);
             std::cout<<cmp<<std::endl;
