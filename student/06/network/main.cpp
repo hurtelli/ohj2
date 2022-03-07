@@ -47,23 +47,25 @@ void save(std::string id1, std::string id2, std::map<std::string,std::vector<std
 //mikäli ei ole alaid:tä tulostaa vain id nimen
 //ja palaa takaisin ylempään kerrokseen
 void print(std::map<std::string,std::vector<std::string>> names, std::string id,int& num){
+    //SISENNYS 0
     std::string merkit(num*2,'.');
 
     //jos id:llä on alaideitä
     if(names.find(id)!=names.end()){
         //tulostetaan nimi
         std::cout<<merkit<<id<<std::endl;
-        //suoritetaan print tutkiminen alaid:lle
+        //SISENNYS +1
         ++num;
+        //suoritetaan print tutkiminen alaid:lle
         for(unsigned int i=0; i<names.at(id).size();++i){
             print(names, names.at(id).at(i),num);
         }
+        --num;
     }
     //jos id on umpikuja
     else{
         //tulostetaan nimi ja palataan
         std::cout<<merkit<<id<<std::endl;
-        --num;
         return;
     }
 }
