@@ -87,6 +87,24 @@ void count(std::map<std::string,std::vector<std::string>> names, std::string id,
     }
 }
 
+
+void depth(std::map<std::string,std::vector<std::string>> names, std::string id, int& d, int& cmp){
+    if(names.find(id)!=names.end()){
+        ++d;
+        for(unsigned int i=0;i<names.at(id).size();++i){
+            depth(names, names.at(id).at(i),d,cmp);
+        }
+
+        --d;
+    }
+    else{
+        if(d>cmp){
+            cmp = d;
+        }
+        return;
+    }
+}
+
 int main()
 {
     int nm = 0;
@@ -155,8 +173,10 @@ int main()
                 continue;
             }
             std::string id = parts.at(1);
-
-            // TODO: Implement the command here!
+            int d=0;
+            int cmp=0;
+            depth(names,id,d,cmp);
+            std::cout<<cmp<<std::endl;
 
         }
         else if(command == "Q" or command == "q")
