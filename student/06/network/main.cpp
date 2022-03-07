@@ -60,12 +60,29 @@ void print(std::map<std::string,std::vector<std::string>> names, std::string id,
         for(unsigned int i=0; i<names.at(id).size();++i){
             print(names, names.at(id).at(i),num);
         }
+        //SISENNYS -1
         --num;
     }
     //jos id on umpikuja
     else{
         //tulostetaan nimi ja palataan
         std::cout<<merkit<<id<<std::endl;
+        return;
+    }
+}
+
+
+void count(std::map<std::string,std::vector<std::string>> names, std::string id, int& size){
+    //mikäli idllä on alaideitä
+    if(names.find(id)!=names.end()){
+        //lisätään nykyinen id määrä
+        size += names.at(id).size();
+        //lasketaan alaidt countilla
+        for(unsigned int i=0;i<names.at(id).size();++i){
+            count(names, names.at(id).at(i), size);
+        }
+    }
+    else{
         return;
     }
 }
@@ -125,8 +142,9 @@ int main()
                 continue;
             }
             std::string id = parts.at(1);
-
-            // TODO: Implement the command here!
+            int size =0;
+            count(names,id, size);
+            std::cout<<size<<std::endl;
 
         }
         else if(command == "D" or command == "d")
