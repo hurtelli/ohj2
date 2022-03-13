@@ -25,6 +25,15 @@
 #include <set>
 #include <map>
 #include <algorithm>
+#include <sstream>
+
+//Alphabetize the vector and print it
+void Aprint(std::vector<std::string> v){
+    sort(v.begin(),v.end());
+    for(unsigned int i=0;i<v.size();++i){
+        std::cout<<v.at(i)<<std::endl;
+    }
+}
 
 // Casual split func, if delim char is between "'s, ignores it.
 std::vector<std::string> split( const std::string& str, char delim = ';' )
@@ -53,8 +62,18 @@ std::vector<std::string> split( const std::string& str, char delim = ';' )
     return result;
 }
 
+//Casual split func for useful purposes
+std::vector<std::string> ssplit( const std::string& str, char delim = ' ' ){
+      std::vector<std::string> output={};
+      std::stringstream ss(str);
+      std::string s;
+      while (std::getline(ss, s, delim)) {
+          output.push_back(s);
+      }
+      return output;
+}
+
 bool readfile(std::string filename, std::set<std::string>& xgames,std::map<std::string,std::map<std::string, int>>& gdata){
-    std::cout<<"beenis:DD"<<std::endl;
     std::ifstream file(filename);
     if(!file){
         return false;
@@ -94,39 +113,76 @@ bool readfile(std::string filename, std::set<std::string>& xgames,std::map<std::
 void allgames(std::set<std::string>& xgames){
     //temporary vector to get the games sorted
     std::vector<std::string> tvec={};
-    std::cout<<"benis"<<std::endl;
     for(const auto &a : xgames){
         tvec.push_back(a);
     }
-    sort(tvec.begin(),tvec.end());
-    for(unsigned int i=0;i<tvec.size();++i){
-        std::cout<<tvec.at(i)<<std::endl;
-    }
+    Aprint(tvec);
 }
+
+void allplayers(std::map<std::string,std::map<std::string, int>> gdata){
+    std::set<std::string> stnames={};
+    std::vector<std::string> vtnames={};
+    for (const auto &item : gdata) {
+        for(const auto &item2 : item.second){
+            if(stnames.find(item2.first)!=stnames.end()){
+            }
+            else{
+                stnames.insert(item2.first);
+                vtnames.push_back(item2.first);
+            }
+        }
+    }
+    Aprint(vtnames);
+}
+
+void player(std::map<std::string,std::map<std::string, int>> gdata, std::string pname){
+    std::set<std::string> spgames={};
+    std::vector<std::string> vpgames={};
+    for(const auto &a : gdata){
+        for(const auto &b : a.second){
+            if(b.first==pname){
+                if(spgames.find(pname)==spgames.end()){
+                    spgames.insert(a.first);
+                    vpgames.push_back(a.first);
+                }
+            }
+        }
+    }
+    //Prints the players name and the list of games
+    if(vpgames.size()==0){
+        std::cout<<"Error: Player could not be found."<<std::endl;
+    }else{
+    std::cout<<"Player "<<pname<<" plays the following games:"<<std::endl;
+    Aprint(vpgames);
+    }
+
+}
+
+
 
 bool inputloop(std::set<std::string>& xgames, std::map<std::string,std::map<std::string, int>>& gdata){
     //ask for input and use split on it to get the command as a single entity
     std::string cmnd ="";
     std::cout<<"games>";
-    std::cin>>cmnd;
-    std::vector<std::string> cmndv = split(cmnd);
+    getline(std::cin,cmnd);
+    std::vector<std::string> cmndv = ssplit(cmnd);
     cmnd = cmndv.at(0);
     std::transform(cmnd.begin(), cmnd.end(), cmnd.begin(), ::toupper);
     //command quit ends the loop and program
     if(cmnd=="QUIT"){
         return false;
     }
-    else if(cmnd=="ALL_GAMES" and cmndv.size()<2){
+    else if(cmnd=="ALL_GAMES" and cmndv.size()==1){
         allgames(xgames);
     }
     else if(cmnd=="GAME"){
         //rakenna tää#######################
     }
-    else if(cmnd=="ALL_PLAYERS"){
-        //rakenna tää#######################
+    else if(cmnd=="ALL_PLAYERS" and cmndv.size()==1){
+        allplayers(gdata);
     }
     else if(cmnd=="PLAYER"){
-        //rakenna tää#######################
+        player(gdata,cmndv.at(1));
     }
     else{
         std::cout<<"Invalid input"<<std::endl;
