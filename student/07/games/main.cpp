@@ -258,7 +258,7 @@ bool inputloop(std::set<std::string>& xgames, std::map<std::string,std::map<std:
         player(gdata,cmndv.at(1));
     }
     else{
-        std::cout<<"Invalid input"<<std::endl;
+        std::cout<<"Error: Invalid input"<<std::endl;
     }
 
     return true;
