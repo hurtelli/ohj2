@@ -62,17 +62,6 @@ std::vector<std::string> split( const std::string& str, char delim = ';' )
     return result;
 }
 
-//Casual split func for useful purposes, splits str with ' '
-std::vector<std::string> ssplit( const std::string& str, char delim = ' ' ){
-      std::vector<std::string> output={};
-      std::stringstream ss(str);
-      std::string s;
-      while (std::getline(ss, s, delim)) {
-          output.push_back(s);
-      }
-      return output;
-}
-
 bool readfile(std::string filename, std::set<std::string>& xgames,std::map<std::string,std::map<std::string, int>>& gdata, std::string& failname){
     std::ifstream file(filename);
     if(!file){
@@ -117,6 +106,7 @@ void allgames(std::set<std::string>& xgames){
     for(const auto &a : xgames){
         tvec.push_back(a);
     }
+    std::cout<<"All games in alphabetical order:"<<std::endl;
     Aprint(tvec);
 }
 
@@ -133,6 +123,7 @@ void allplayers(std::map<std::string,std::map<std::string, int>> gdata){
             }
         }
     }
+    std::cout<<"All players in alphabetical order:"<<std::endl;
     Aprint(vtnames);
 }
 
@@ -153,7 +144,7 @@ void player(std::map<std::string,std::map<std::string, int>> gdata, std::string 
     if(vpgames.size()==0){
         std::cout<<"Error: Player could not be found."<<std::endl;
     }else{
-    std::cout<<"Player "<<pname<<" plays the following games:"<<std::endl;
+    std::cout<<"Player "<<pname<<" playes the following games:"<<std::endl;
     Aprint(vpgames);
     }
 
@@ -227,7 +218,7 @@ void prntgame(std::map<std::string,std::map<std::string, int>> gdata, std::strin
                 }
     }
     else{
-    std::cout<<"Error: Invalid input"<<std::endl;
+    std::cout<<"Error: Game could not be found."<<std::endl;
     }
 
 
@@ -235,11 +226,16 @@ void prntgame(std::map<std::string,std::map<std::string, int>> gdata, std::strin
 
 
 bool inputloop(std::set<std::string>& xgames, std::map<std::string,std::map<std::string, int>>& gdata){
+
     //ask for input and use split on it to get the command as a single entity
     std::string cmnd ="";
     std::cout<<"games> ";
     getline(std::cin,cmnd);
-    std::vector<std::string> cmndv = ssplit(cmnd);
+
+    //split into vector using split() and ' ' as delimiter
+    std::vector<std::string> cmndv = split(cmnd,' ');
+
+    //transforms the command part to uppercase
     cmnd = cmndv.at(0);
     std::transform(cmnd.begin(), cmnd.end(), cmnd.begin(), ::toupper);
     //command quit ends the loop and program
@@ -249,7 +245,7 @@ bool inputloop(std::set<std::string>& xgames, std::map<std::string,std::map<std:
     else if(cmnd=="ALL_GAMES" and cmndv.size()==1){
         allgames(xgames);
     }
-    else if(cmnd=="GAME" and cmndv.size()==2){
+    else if(cmnd=="GAME" and cmndv.size()>1){
         prntgame(gdata,cmndv.at(1));
     }
     else if(cmnd=="ALL_PLAYERS" and cmndv.size()==1){
@@ -259,7 +255,7 @@ bool inputloop(std::set<std::string>& xgames, std::map<std::string,std::map<std:
         player(gdata,cmndv.at(1));
     }
     else{
-        std::cout<<"Error: Invalid input"<<std::endl;
+        std::cout<<"Error: Invalid input."<<std::endl;
     }
 
     return true;

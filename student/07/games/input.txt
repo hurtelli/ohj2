@@ -1,4 +1,4 @@
-Sudoku;Matti
+Sudoku;Matti;1
 Sudoku;Manu;25
 Sudoku;Maarit;50
 Sudoku;Master Player;100
