@@ -62,7 +62,7 @@ std::vector<std::string> split( const std::string& str, char delim = ';' )
     return result;
 }
 
-//Casual split func for useful purposes
+//Casual split func for useful purposes, splits str with ' '
 std::vector<std::string> ssplit( const std::string& str, char delim = ' ' ){
       std::vector<std::string> output={};
       std::stringstream ss(str);
@@ -158,6 +158,79 @@ void player(std::map<std::string,std::map<std::string, int>> gdata, std::string 
 
 }
 
+void prntgame(std::map<std::string,std::map<std::string, int>> gdata, std::string gname){
+
+    if(gdata.find(gname)!=gdata.end()){
+        //vector for the points to print them in order
+        std::vector<int> usednumbers = {};
+        //temp map to hold the gname games data with search capability for the points amount
+        std::map<int, std::vector<std::string> > thegamedata = {};
+
+        //1. Adding the data from gdata to the wanted game == thegamedata vector
+        //
+        for(const auto& b : gdata.at(gname)){
+
+            //if the points amount is an entry in the games data
+            if(thegamedata.find(b.second)!=thegamedata.end()){
+                //if the name is already in the list in the key points
+                bool isinthelist = false;
+                for(unsigned int i=0;i<thegamedata[b.second].size();++i){
+                    if(thegamedata[b.second].at(i)==b.first){
+                        isinthelist = true;
+                    }
+                }
+                if(not isinthelist){
+                    thegamedata[b.second].push_back(b.first);
+                }
+            }
+            //else add the point amount to used and insert the points amount to thgamedata
+            //and add the name to vector going with it
+            else{
+                usednumbers.push_back(b.second);
+                thegamedata.insert({b.second,{b.first}});
+            }
+        }
+
+        //sorting the points values in usednumbers
+        std::sort(usednumbers.begin(),usednumbers.end());
+
+
+        //2. Sorting the names in the vector inside thegamedata map
+        //
+        //b.first is the points amount and b.second is the names VECTOR
+        for(const auto& b : thegamedata){
+            std::sort(thegamedata.at(b.first).begin(),thegamedata.at(b.first).end());
+        }
+
+        //2.b. Changing the names vector to a single string with commas
+        //
+        for(const auto& c : thegamedata){
+            std::string namestr="";
+            for( size_t i = 0; i < thegamedata.at(c.first).size(); ++i ) {
+                namestr += thegamedata[c.first].at(i);
+                namestr += ", ";
+            }
+            namestr.pop_back();namestr.pop_back();
+            //deleting the old key and value to enter the new one with single string
+            thegamedata.erase(c.first);
+            thegamedata.insert({c.first,{namestr}});
+            //now the data can be accesed by data.at(points) and the output is the
+            //player names in one string
+        }
+
+        //3. Printing the output
+        //
+        std::cout<<"Game "<<gname<<" has these scores and players, listed in ascending order:"<<std::endl;
+        for(unsigned int j=0;j<usednumbers.size();++j){
+                    std::cout<<usednumbers.at(j)<<" : "<< thegamedata[usednumbers.at(j)].at(0) <<std::endl;
+                }
+    }
+    else{
+    std::cout<<"Error: Invalid input"<<std::endl;
+    }
+
+
+}
 
 
 bool inputloop(std::set<std::string>& xgames, std::map<std::string,std::map<std::string, int>>& gdata){
@@ -175,8 +248,8 @@ bool inputloop(std::set<std::string>& xgames, std::map<std::string,std::map<std:
     else if(cmnd=="ALL_GAMES" and cmndv.size()==1){
         allgames(xgames);
     }
-    else if(cmnd=="GAME"){
-        //rakenna tää#######################
+    else if(cmnd=="GAME" and cmndv.size()==2){
+        prntgame(gdata,cmndv.at(1));
     }
     else if(cmnd=="ALL_PLAYERS" and cmndv.size()==1){
         allplayers(gdata);
@@ -203,7 +276,7 @@ int main()
     std::string filename = "";
     getline(std::cin,filename);
     
-    if(!readfile(filename,xgames,gdata)){
+     if(!readfile(filename,xgames,gdata)){
         std::cout<<"Error: File could not be read."<<std::endl;
         return EXIT_FAILURE;
     }
