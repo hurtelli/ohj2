@@ -272,7 +272,7 @@ int main()
     std::map<std::string,std::map<std::string, int>> gdata={};
 
     //setting the name of input file
-    std::cout<< "Give a name for an input file: ";
+    std::cout<< "Give a name for input file: ";
     std::string filename = "";
     getline(std::cin,filename);
     
