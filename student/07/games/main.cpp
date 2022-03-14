@@ -73,9 +73,10 @@ std::vector<std::string> ssplit( const std::string& str, char delim = ' ' ){
       return output;
 }
 
-bool readfile(std::string filename, std::set<std::string>& xgames,std::map<std::string,std::map<std::string, int>>& gdata){
+bool readfile(std::string filename, std::set<std::string>& xgames,std::map<std::string,std::map<std::string, int>>& gdata, std::string& failname){
     std::ifstream file(filename);
     if(!file){
+        failname = "unread";
         return false;
     }
     else{
@@ -84,8 +85,8 @@ bool readfile(std::string filename, std::set<std::string>& xgames,std::map<std::
             std::vector<std::string> vecrow = split(row);
             //If input row doesn't meet the required 3 data pieces
             if(vecrow.size()!=3){
-                std::cout<<"Error: Invalid format in file."<<std::endl;
-                return EXIT_FAILURE;
+                failname = "badformat";
+                return false;
             }
             //if the game is already in the xgames
             if(xgames.find(vecrow[0])!=xgames.end()){
@@ -236,7 +237,7 @@ void prntgame(std::map<std::string,std::map<std::string, int>> gdata, std::strin
 bool inputloop(std::set<std::string>& xgames, std::map<std::string,std::map<std::string, int>>& gdata){
     //ask for input and use split on it to get the command as a single entity
     std::string cmnd ="";
-    std::cout<<"games>";
+    std::cout<<"games> ";
     getline(std::cin,cmnd);
     std::vector<std::string> cmndv = ssplit(cmnd);
     cmnd = cmndv.at(0);
@@ -276,12 +277,21 @@ int main()
     std::string filename = "";
     getline(std::cin,filename);
     
-     if(!readfile(filename,xgames,gdata)){
-        std::cout<<"Error: File could not be read."<<std::endl;
-        return EXIT_FAILURE;
+    //opening and writing the file data
+    std::string failname = "";
+    if(!readfile(filename,xgames,gdata,failname)){
+        if(failname=="unread"){
+            std::cout<<"Error: File could not be read."<<std::endl;
+            return EXIT_FAILURE;
+        }
+        if(failname=="badformat"){
+            std::cout<<"Error: Invalid format in file."<<std::endl;
+            return EXIT_FAILURE;
+        }
     }
-    while(inputloop(xgames,gdata)){
 
+    //the main input loop
+    while(inputloop(xgames,gdata)){
     }
     return EXIT_SUCCESS;
 }
