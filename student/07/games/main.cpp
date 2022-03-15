@@ -344,6 +344,10 @@ void addplayer(std::map<std::string,std::map<std::string, int>>& gdata, std::str
         }
         std::cout<<"Player was added."<<std::endl;
     }
+    //if the game doesn't exist
+    else{
+        std::cout<<"Error: Game could not be found."<<std::endl;
+    }
 }
 
 //goes through the data given and if finds instance of player pname existing and having scores in a game
@@ -397,7 +401,7 @@ bool inputloop(std::set<std::string>& xgames, std::map<std::string,std::map<std:
     else if(cmnd=="ALL_GAMES" and cmndv.size()==1){
         allgames(xgames);
     }
-    else if(cmnd=="GAME" and cmndv.size()==2){
+    else if(cmnd=="GAME" and cmndv.size()>1){
         prntgame(gdata,cmndv.at(1));
     }
     else if(cmnd=="ALL_PLAYERS" and cmndv.size()==1){
@@ -406,7 +410,7 @@ bool inputloop(std::set<std::string>& xgames, std::map<std::string,std::map<std:
     else if(cmnd=="PLAYER" and cmndv.size()==2){
         player(gdata,cmndv.at(1));
     }
-    else if(cmnd=="ADD_GAME" and cmndv.size()==2){
+    else if(cmnd=="ADD_GAME" and cmndv.size()>1){
         addgame(gdata,xgames,cmndv.at(1));
     }
     else if(cmnd=="ADD_PLAYER" and cmndv.size()==4){
