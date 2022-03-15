@@ -1,23 +1,59 @@
 /*  COMP.CS.100 Project 2: GAME STATISTICS
- * ===============================
- * EXAMPLE SOLUTION
- * ===============================
  *
- *  Acts as a game statistics with n commands:
- * ALL_GAMES - Prints all known game names
- * GAME <game name> - Prints all players playing the given game
- * ALL_PLAYERS - Prints all known player names
- * PLAYER <player name> - Prints all games the given player plays
- * ADD_GAME <game name> - Adds a new game
- * ADD_PLAYER <game name> <player name> <score> - Adds a new player with the
- * given score for the given game, or updates the player's score if the player
- * already playes the game
- * REMOVE_PLAYER <player name> - Removes the player from all games
+ *   A program to monitor data from multiple games
  *
- *  The data file's lines should be in format game_name;player_name;score
- * Otherwise the program execution terminates instantly (but still gracefully).
+ *   The data includes game names, players and their points in specific games
+ *   Has seemingly endless storage to go through.
+ *   Works with STL storages.
+ *
+ *   The program works as follows:
+ *   1. the program asks for an input file
+ *      *the file should be a readable text document
+ *      *the data should be formatted as follows:
+ *          gamename;playername;points
+ *      *where point should be represented in numbers
+ *      *when the input is in order and read and saved to the program memory, it closes the file and start the mainloop
+ *
+ *   1.b. if the input file isn't in the correct format program ends with correct error message
+ *      -doesn't have 3 data pieces separated by semicolons
+ *      -is the wrong filetype
+ *
+ *   2.  in the main input loop program asks for a command and depending on the command does following things:
+ *
+ *      *QUIT
+ *          -self explanatory, quits the program
+ *
+ *      *ALL_GAMES
+ *          -prints all the game names saved in the storage, in alphabetical order
+ *
+ *      *GAME x
+ *          -requires a game name in the x spot, if the name has two words separated by a space, the name should be inside ""
+ *          -prints the x games players and their points in form of a scoreboard
+ *
+ *      *ALL_GAMES
+ *          -prints all games stored in the database in alphabetical order
+ *
+ *      *PLAYER x
+ *          -requires a player name in the x spot, if the name has two words separated by a space, the name should be inside ""
+ *          -prints all the games that player x has scores in
+ *
+ *
+ *
+ *
+ *      Ohjelman kirjoittaja
+ *      Nimi: Otto Palmgren
+ *      Opiskelijanumero:
+ *      Käyttäjätunnus: protpa
+ *      E-mail: otto.palmgren@tuni.fi
+ *
+ *      Huomiota ohjelmasta ja sen toteutuksesta:
+ *
+ *      Olisin ehkä halunnut tehdä tietorakenteen olio-ohjelmoinnilla, mutta ei valmiudet riittänyt suorittaa sitä c++
+ *      Muutamassa kohdassa joutui tekemään lukuisia väliaikaissäiliöitä datan käsittelyyn, olisi mukava tietää miten dataa kannattaisi
+ *      käsitellä vastaavassa tilanteessa, ilman lukuisia väliaikaissäiliöitä, ohjelman optimoinniksi.
  *
  * */
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -27,7 +63,7 @@
 #include <algorithm>
 #include <sstream>
 
-//Alphabetize the vector and print it
+//Alphabetize the given vector and print it
 void Aprint(std::vector<std::string> v){
     sort(v.begin(),v.end());
     for(unsigned int i=0;i<v.size();++i){
@@ -62,33 +98,45 @@ std::vector<std::string> split( const std::string& str, char delim = ';' )
     return result;
 }
 
-bool readfile(std::string filename, std::set<std::string>& xgames,std::map<std::string,std::map<std::string, int>>& gdata, std::string& failname){
+//Function to open the file, add the data in the file to gamedata map
+//also has implemented function failure recognisition in failname
+bool readfile(std::string filename, std::set<std::string>& xgames,
+              std::map<std::string,std::map<std::string, int>>& gdata, std::string& failname){
+
+    //if opening the file the maininterface gets
+    //info that failure was because of "unread" unreadability
     std::ifstream file(filename);
     if(!file){
         failname = "unread";
         return false;
     }
+    //loop for getting the data
     else{
         std::string row="";
         while(getline(file,row)){
             std::vector<std::string> vecrow = split(row);
+
             //If input row doesn't meet the required 3 data pieces
+            //returns failname of bad format in file
             if(vecrow.size()!=3){
                 failname = "badformat";
                 return false;
             }
-            //if the game is already in the xgames
+            //if the game is already in the existing games set
             if(xgames.find(vecrow[0])!=xgames.end()){
+
                 //if the player has played the game before
                 if(gdata[vecrow[0]].find(vecrow[1])!=gdata[vecrow[0]].end()){
                     gdata[vecrow[0]][vecrow[1]]=stoi(vecrow[2]);
                 }
+
                 //if the player isn't in the map
                 else{
                     //adds the player data
                     gdata[vecrow[0]].insert({vecrow[1],stoi(vecrow[2])});
                 }
             }
+            //if the game hasn't been inserted to xgames
             else{
                 xgames.insert(vecrow[0]);
                 gdata[vecrow[0]][vecrow[1]] = stoi(vecrow.at(2));;
@@ -110,11 +158,18 @@ void allgames(std::set<std::string>& xgames){
     Aprint(tvec);
 }
 
+//Creates temporary data storages to analyze and print all the players names
 void allplayers(std::map<std::string,std::map<std::string, int>> gdata){
+
+    //temporary set for fast search of existing players
     std::set<std::string> stnames={};
+    //temporary vector for sorting and printing the players
     std::vector<std::string> vtnames={};
+
+    //goes through the main game data and adds the names to temporary set and vec
     for (const auto &item : gdata) {
         for(const auto &item2 : item.second){
+            //if the namee is already in the temp set it doesn't get added again
             if(stnames.find(item2.first)!=stnames.end()){
             }
             else{
@@ -127,12 +182,24 @@ void allplayers(std::map<std::string,std::map<std::string, int>> gdata){
     Aprint(vtnames);
 }
 
+//Goes through the main gamedata and searches for instances of the wanted player pname
+//If player exists prints the player name and the games played by pname
 void player(std::map<std::string,std::map<std::string, int>> gdata, std::string pname){
+
+    //temporary set for games that the player pname plays
     std::set<std::string> spgames={};
+    //temporary vector of the games that the player plays
+    //used for easy sorting
     std::vector<std::string> vpgames={};
+
+    //goes through the main data to get the players played games
+    //a.first is the game name a.second is the player name
     for(const auto &a : gdata){
+        //b.first is the player name and b.second is the points amount
         for(const auto &b : a.second){
+            //if the wanted name is found in the game being searched through
             if(b.first==pname){
+                //gets added if the name isn't in the temp set and vec already
                 if(spgames.find(pname)==spgames.end()){
                     spgames.insert(a.first);
                     vpgames.push_back(a.first);
@@ -140,19 +207,26 @@ void player(std::map<std::string,std::map<std::string, int>> gdata, std::string 
             }
         }
     }
-    //Prints the players name and the list of games
+
+    //if the player isn't found in any of the games.
     if(vpgames.size()==0){
         std::cout<<"Error: Player could not be found."<<std::endl;
-    }else{
+    }
+    //Prints the players name and the list of games
+    else{
     std::cout<<"Player "<<pname<<" playes the following games:"<<std::endl;
     Aprint(vpgames);
     }
 
 }
 
+//Goes thtough the main gamedata and creates a new temporary data storage for the wanted game
+//Prints the game and the points and players, all in order
 void prntgame(std::map<std::string,std::map<std::string, int>> gdata, std::string gname){
 
+    //if the game exists starts the search
     if(gdata.find(gname)!=gdata.end()){
+
         //vector for the points to print them in order
         std::vector<int> usednumbers = {};
         //temp map to hold the gname games data with search capability for the points amount
@@ -164,7 +238,7 @@ void prntgame(std::map<std::string,std::map<std::string, int>> gdata, std::strin
 
             //if the points amount is an entry in the games data
             if(thegamedata.find(b.second)!=thegamedata.end()){
-                //if the name is already in the list in the key points
+                //if the name is already in the list in the key "points"
                 bool isinthelist = false;
                 for(unsigned int i=0;i<thegamedata[b.second].size();++i){
                     if(thegamedata[b.second].at(i)==b.first){
@@ -217,6 +291,8 @@ void prntgame(std::map<std::string,std::map<std::string, int>> gdata, std::strin
                     std::cout<<usednumbers.at(j)<<" : "<< thegamedata[usednumbers.at(j)].at(0) <<std::endl;
                 }
     }
+
+    //if the game isn't found
     else{
     std::cout<<"Error: Game could not be found."<<std::endl;
     }
@@ -224,7 +300,8 @@ void prntgame(std::map<std::string,std::map<std::string, int>> gdata, std::strin
 
 }
 
-
+//the main loop for inputting the commands and returning if somtehing doesn't go as expected
+//bool type to make while input loop in main
 bool inputloop(std::set<std::string>& xgames, std::map<std::string,std::map<std::string, int>>& gdata){
 
     //ask for input and use split on it to get the command as a single entity
@@ -238,7 +315,10 @@ bool inputloop(std::set<std::string>& xgames, std::map<std::string,std::map<std:
     //transforms the command part to uppercase
     cmnd = cmndv.at(0);
     std::transform(cmnd.begin(), cmnd.end(), cmnd.begin(), ::toupper);
-    //command quit ends the loop and program
+
+    //checks what the command in question does and does it
+    //if it is a bad command error is printed and new command needed
+    //
     if(cmnd=="QUIT"){
         return false;
     }
@@ -276,6 +356,8 @@ int main()
     //opening and writing the file data
     std::string failname = "";
     if(!readfile(filename,xgames,gdata,failname)){
+        //if the file couldn't be read prints the correct failure reason according to failname
+        //if file errors, the program ends with exit failure
         if(failname=="unread"){
             std::cout<<"Error: File could not be read."<<std::endl;
             return EXIT_FAILURE;
