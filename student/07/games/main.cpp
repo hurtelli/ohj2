@@ -37,6 +37,21 @@
  *          -requires a player name in the x spot, if the name has two words separated by a space, the name should be inside ""
  *          -prints all the games that player x has scores in
  *
+ *      *ADD_GAME x
+ *          -requires a game name in the x spot, if the name has two words separated by a space, the name should be inside ""
+ *          -adds a game to the programs database
+ *
+ *      *ADD_PLAYER x y z
+ *          -requires three inputs for the player addition
+ *              -x == the game name that the player plays
+ *              -y == the players name
+ *              -z == the players score in the game x
+ *          -if player has a score already in the game, this updates it
+ *
+ *      *REMOVE x
+ *          -requires a player name in the x spot, if the name has two words separated by a space, the name should be inside ""
+ *          -removes a player from the whole database
+ *          -can NOT be used to remove player from a single game
  *
  *
  *
@@ -300,6 +315,63 @@ void prntgame(std::map<std::string,std::map<std::string, int>> gdata, std::strin
 
 }
 
+//adds the wanted game to the database
+void addgame(std::map<std::string,std::map<std::string, int>>& gdata,std::set<std::string>& xgames, std::string gname){
+    //checks whether the game is already in the list, if not adds it
+    if(gdata.find(gname)==gdata.end()){
+        gdata.insert({gname,{}});
+        xgames.insert(gname);
+        std::cout<<"Game was added."<<std::endl;
+    }
+    else{
+        std::cout<<"Error: Already exists."<<std::endl;
+    }
+}
+
+//adds the wanted player and score to the wanted games database,
+//if the player has a score, updates it
+void addplayer(std::map<std::string,std::map<std::string, int>>& gdata, std::string gname, std::string pname, int points){
+
+    //if the game exists in the database
+    if(gdata.find(gname)!=gdata.end()){
+        //adds the data if the player hasn't a score in the game already
+        if(gdata[gname].find(pname)==gdata[gname].end()){
+            gdata[gname].insert({pname,points});
+        }
+        //adds only the points if the player has a score already
+        else{
+            gdata[gname][pname] = points;
+        }
+        std::cout<<"Player was added."<<std::endl;
+    }
+}
+
+//goes through the data given and if finds instance of player pname existing and having scores in a game
+//erases them.
+void removeplayer(std::map<std::string,std::map<std::string, int>>& gdata,std::string pname){
+    //bool for finding the pname
+    bool found = false;
+
+    //loop goes through the data and if finds instance of pname deletes its data
+    //a.first is game name a.second is map of players and scores
+    for(const auto& a: gdata){
+        //if the player name is found in the game being searched
+        if(gdata[a.first].find(pname)!=gdata[a.first].end()){
+            gdata[a.first].erase(pname);
+            found=true;
+        }
+    }
+
+    //if the player got removed prints that
+    //else prints error message of not found
+    if(found){
+        std::cout<<"Player was removed from all games."<<std::endl;
+    }
+    else{
+        std::cout<<"Error: Player could not be found."<<std::endl;
+    }
+}
+
 //the main loop for inputting the commands and returning if somtehing doesn't go as expected
 //bool type to make while input loop in main
 bool inputloop(std::set<std::string>& xgames, std::map<std::string,std::map<std::string, int>>& gdata){
@@ -325,14 +397,23 @@ bool inputloop(std::set<std::string>& xgames, std::map<std::string,std::map<std:
     else if(cmnd=="ALL_GAMES" and cmndv.size()==1){
         allgames(xgames);
     }
-    else if(cmnd=="GAME" and cmndv.size()>1){
+    else if(cmnd=="GAME" and cmndv.size()==2){
         prntgame(gdata,cmndv.at(1));
     }
     else if(cmnd=="ALL_PLAYERS" and cmndv.size()==1){
         allplayers(gdata);
     }
-    else if(cmnd=="PLAYER"){
+    else if(cmnd=="PLAYER" and cmndv.size()==2){
         player(gdata,cmndv.at(1));
+    }
+    else if(cmnd=="ADD_GAME" and cmndv.size()==2){
+        addgame(gdata,xgames,cmndv.at(1));
+    }
+    else if(cmnd=="ADD_PLAYER" and cmndv.size()==4){
+        addplayer(gdata,cmndv.at(1),cmndv.at(2),stoi(cmndv.at(3)));
+    }
+    else if(cmnd=="REMOVE" and cmndv.size()==2){
+        removeplayer(gdata,cmndv.at(1));
     }
     else{
         std::cout<<"Error: Invalid input."<<std::endl;
@@ -340,6 +421,7 @@ bool inputloop(std::set<std::string>& xgames, std::map<std::string,std::map<std:
 
     return true;
 }
+
 
 int main()
 {
