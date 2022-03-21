@@ -148,6 +148,7 @@ int main() {
                 std::string nsnumber = "";
                 std::cout<<"Enter a new phone number: ";
                 std::getline(std::cin,nsnumber);
+                std::cout<<"\n";
                 if(!is_valid_phone_number(nsnumber)){
                     continue;
                 } else{
