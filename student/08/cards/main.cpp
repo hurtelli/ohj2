@@ -12,10 +12,10 @@ int main() {
     cin >> n;
 
     cout << endl << "print_from_top_to_bottom (deck is empty)" << endl;
-    deck.print_from_top_to_bottom(cout);
+   // deck.print_from_top_to_bottom(cout);
 
     cout << endl << "add * n" << endl;
-    for(int i = 0; i < n; i++) {
+    for(int i = 0; i < n; ++i) {
         deck.add(i);
     }
 
@@ -35,8 +35,8 @@ int main() {
     cout << endl << "print_from_top_to_bottom" << endl;
     deck.print_from_top_to_bottom(cout);
 
-    cout << endl << "print_from_bottom_to_top" << endl;
-    deck.print_from_bottom_to_top(cout);
+//    cout << endl << "print_from_bottom_to_top" << endl;
+//    deck.print_from_bottom_to_top(cout);
 
     cout << endl;
     int value = 0;
