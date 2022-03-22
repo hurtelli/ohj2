@@ -103,6 +103,10 @@ void Cards::print_from_bottom_to_top(std::ostream &s)
 
 bool Cards::remove(int &id){
 
+    if(top_ == nullptr){
+        return false;
+    }
+
     id = top_->data;
 
     Card_data* current = top_;
