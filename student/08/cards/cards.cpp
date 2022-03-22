@@ -3,8 +3,12 @@
 
 
 Cards::Cards()
-{
+{}
 
+Card_data *Cards::get_topmost()
+{
+    Card_data* timppa = top_;
+    return timppa;
 }
 
 Cards::~Cards()
@@ -18,6 +22,12 @@ Cards::~Cards()
 
 }
 
+int Cards::recursive_print(Card_data *top, std::ostream &s)
+{
+    s<<top;
+    return 0;
+}
+
 void Cards::add(int id)
 {
 
@@ -29,11 +39,8 @@ void Cards::add(int id)
         top_ = newid;
         return;
     }
-
     newid->next = top_;
     top_ = newid;
-
-
 }
 
 void Cards::print_from_top_to_bottom(std::ostream& s)
@@ -87,6 +94,11 @@ bool Cards::top_to_bottom()
     Card_data* current3 = top_;
     top_ = current3->next;
     return true;
+}
+
+void Cards::print_from_bottom_to_top(std::ostream &s)
+{
+
 }
 
 bool Cards::remove(int &id){
