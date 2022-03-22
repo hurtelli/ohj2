@@ -39,7 +39,7 @@ int main() {
 //    deck.print_from_bottom_to_top(cout);
 
     cout << endl;
-    int value = 0;
+    int value;
     while(deck.remove(value)) {
         cout << "remove " << value << endl;
     }
