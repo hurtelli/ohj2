@@ -36,8 +36,8 @@ void Queue::enqueue(const string &reg)
         last_ = newid;
     }
     else{
-        std::cout<<"GREEN: Vehicle "<<reg<<" need not stop to wait"<<std::endl;
-        is_green_ = false;
+        std::cout<<"GREEN: The vehicle "<<reg<<" need not stop to wait"<<std::endl;
+
     }
 }
 
@@ -91,10 +91,10 @@ void Queue::switch_light()
     else{
         if(is_green_){
             is_green_ = false;
-            std::cout<<"RED: No vehicle in traffic lights"<<std::endl;
+            std::cout<<"RED: No vehicles in traffic lights"<<std::endl;
         }else{
             is_green_ = true;
-            std::cout<<"GREEN: No vehicle in traffic lights"<<std::endl;
+            std::cout<<"GREEN: No vehicles in traffic lights"<<std::endl;
         }
     }
 
@@ -118,7 +118,7 @@ void Queue::print() const
                 current = current->next;
             }
             std::cout<<current->reg_num<<" ";
-            std::cout<<"waiting in traffic lights."<<std::endl;
+            std::cout<<"waiting in traffic lights"<<std::endl;
         }
 
     }
