@@ -124,10 +124,10 @@ void Queue::print() const
     }
     else{
         if(is_green_){
-            std::cout<<"GREEN: No vehicles in traffic lights"<<std::endl;
+            std::cout<<"GREEN: No vehicles waiting in traffic lights"<<std::endl;
         }
         else{
-            std::cout<<"RED: No vehicles in traffic lights"<<std::endl;
+            std::cout<<"RED: No vehicles waiting in traffic lights"<<std::endl;
         }
     }
 
