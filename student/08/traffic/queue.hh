@@ -52,6 +52,7 @@ private:
     // the same green period
     unsigned int cycle_;
 
+    unsigned int passed_;
     // You can define more private features here
 
 };
