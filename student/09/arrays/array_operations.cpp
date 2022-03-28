@@ -3,7 +3,6 @@
 
 int greatest_v1(int *itemptr, int size){
     int greatest=0;
-
     while(*itemptr < size){
         if(*itemptr>greatest){
             greatest=*itemptr;
@@ -35,11 +34,10 @@ void copy(int *itemptr, int *endptr, int *targetptr){
 
 void reverse(int *leftptr, int *rightptr){
 
-    while(leftptr!=rightptr){
-        int r = *(rightptr-1);
-        int l = *(leftptr);
-        *(leftptr)=r;
-        *(rightptr-1)=l;
+    while(leftptr<rightptr-1){
+        int x = *leftptr;
+        *leftptr = *(rightptr-1);
+        *(rightptr-1)= x;
         --rightptr;
         ++leftptr;
     }
