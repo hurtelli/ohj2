@@ -37,6 +37,7 @@ const vector<Command> COMMANDS = {
     {"-", 2, false, subtraction},
     {"*", 2, false, multiplication},
     {"/", 2, false, division},
+    {"^", 2, false, toexponent},
     {"PLUS", 2, false, addition},
     {"MINUS", 2, false, subtraction},
     {"TIMES", 2, false, multiplication},
@@ -102,7 +103,7 @@ int main() {
         Command cmd;
         //if the input is a command
         if (!iscmd(input, cmd)){
-            cout << "Error: unknown command." << endl;
+            cout << "Error: unknown command" << endl;
             continue;
         }
         //parameter amount
@@ -119,7 +120,7 @@ int main() {
         double first;
         double second;
         if (!string_to_double(pieces.at(1), first) or !string_to_double(pieces.at(2), second)){
-                    cout << "Error: a non-number operand." << endl;
+                    cout << "Error: a non-number operand" << endl;
                     continue;
         }
         cout << cmd.action(first, second) << endl;
