@@ -103,7 +103,7 @@ int main() {
         Command cmd;
         //if the input is a command
         if (!iscmd(input, cmd)){
-            cout << "Error: unknown command" << endl;
+            cout << "Error: unknown command." << endl;
             continue;
         }
         //parameter amount
@@ -120,7 +120,7 @@ int main() {
         double first;
         double second;
         if (!string_to_double(pieces.at(1), first) or !string_to_double(pieces.at(2), second)){
-                    cout << "Error: a non-number operand" << endl;
+                    cout << "Error: a non-number operand." << endl;
                     continue;
         }
         cout << cmd.action(first, second) << endl;
