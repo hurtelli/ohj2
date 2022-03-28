@@ -10,7 +10,7 @@ int main() {
 
     // Declaring an array with 30 elements, which begins with 4 non-zero values,
     // and the rest of the values are zero.
-    int array[ITEM_NUMBER] = { 1, 3, 6, 9 };
+    int array[ITEM_NUMBER] = { -1, -3, -6, -9 };
 
     // Example on how to apply algorithm library to a C array
     sort(array, array + ITEM_NUMBER);

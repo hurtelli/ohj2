@@ -2,9 +2,9 @@
 #include <iostream>
 
 int greatest_v1(int *itemptr, int size){
-    int greatest=0;
+    int greatest = -1000000000;
     while(*itemptr <= size){
-        if(*itemptr>greatest){
+        if(*itemptr>greatest and *itemptr!=0){
             greatest=*itemptr;
         }
         ++itemptr;
@@ -13,7 +13,7 @@ int greatest_v1(int *itemptr, int size){
 }
 
 int greatest_v2(int *itemptr, int *endptr){
-    int greatest=0;
+    int greatest=-1000000000;
     while(itemptr!=endptr){
         if(*itemptr>greatest){
             greatest =*itemptr;
