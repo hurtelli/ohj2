@@ -1,9 +1,3 @@
-Ohjelmointi 2: Rakenteet / Programming 2: Structures
-
-Kevät/Spring 2022
-
-Tämä repo sisältää opiskelijalle jaettavat materiaalit. /
-This repository contains materials for students.
-
-Kurssin materiaali / Course material:
-https://plus.tuni.fi/comp.cs.110/spring-2022/
+Student-kansio sisältää itse tekemäni tuotokset.
+Templates on näiden tarjotuille templateille
+Examples on koodaustehtäviin liittymättömiä filuja, eli ulkoisia esimerkkejä
